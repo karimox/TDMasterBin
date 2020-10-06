@@ -34,11 +34,18 @@ class EegEpochDataset(Dataset):
 
         self.fields = ['eeg_1', 'eeg_2', 'eeg_3', 'eeg_4', 'eeg_5', 'eeg_6', 'eeg_7']
 
-        self.x_train = {}
-        with h5py.File(x_h5file, "r") as fi:
+        # shape
+        with h5py.File(self.x_filename, "r") as fi:
+            signal = fi[self.fields[0]][()]
+            self.nb_samples = signal.shape[0]
+            self.signal_length = signal.shape[1]
+        self.nb_channels = len(self.fields)
+
+        self.x_train = []
+        with h5py.File(self.x_filename, "r") as fi:
             for field in self.fields:
-                self.x_train[field] = fi[field][()]
-        self.signal_length = len(self.x_train[self.fields[0]][0])
+                self.x_train.append([fi[field][()]])
+        self.x_train = np.stack(self.x_train, axis=2)
 
     def __len__(self):
         return len(self.y_stages)
@@ -47,9 +54,7 @@ class EegEpochDataset(Dataset):
         if torch.is_tensor(idx):
             idx = idx.tolist()
 
-        signal = torch.empty(len(self.fields), self.signal_length)
-        for field in self.fields:
-            signal[field] = self.x_train[field][idx]
+        signal = self.x_train[idx]
         stage = self.y_stages['sleep_stage'][idx]
 
         if self.transform:
@@ -72,3 +77,10 @@ def get_test_dataset(batch_size=32, num_workers=2):
     dataloader = DataLoader(eeg_dataset, batch_size=batch_size, shuffle=True, num_workers=num_workers)
 
     return dataloader
+
+
+if __name__ == "__main__":
+
+    trainloader = get_train_dataset()
+    dataiter = iter(trainloader)
+    signals, labels = dataiter.next()
