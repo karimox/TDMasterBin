@@ -1,0 +1,24 @@
+[tool.poetry]
+name = "td_dreem_bin"
+version = "0.1.0"
+description = "TD with the Master BIN (Bio Ingénierie Neuroscience)"
+authors = ["Karim EL Kanbi <karim@dreem.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+numpy = "^1.19.2"
+scipy = "^1.5.2"
+torch = "^1.6.0"
+scikit-learn = "^0.23.2"
+h5py = "^2.10.0"
+pandas = "^1.1.2"
+matplotlib = "^3.3.2"
+lspopt = "^1.1.1"
+torchvision = "^0.7.0"
+
+[tool.poetry.dev-dependencies]
+pytest = "^4.6"
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"
