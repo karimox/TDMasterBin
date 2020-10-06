@@ -65,18 +65,18 @@ class EegEpochDataset(Dataset):
         return signal, stage
 
 
-def get_train_dataset(derivation, batch_size=32):
+def get_train_dataset(derivation, batch_size=32, num_workers=2):
     """Return train dataset in Dataloader format """
     eeg_dataset = EegEpochDataset(x_h5file=file_xtrain, y_csv_file=file_ytrain, derivation=derivation)
-    dataloader = DataLoader(eeg_dataset, batch_size=batch_size, shuffle=True, num_workers=2)
+    dataloader = DataLoader(eeg_dataset, batch_size=batch_size, shuffle=True, num_workers=num_workers)
 
     return dataloader
 
 
-def get_test_dataset(derivation, batch_size=32):
+def get_test_dataset(derivation, batch_size=32, num_workers=2):
     """Return test dataset in Dataloader format """
     eeg_dataset = EegEpochDataset(x_h5file=file_xtest, y_csv_file=file_ytest, derivation=derivation)
-    dataloader = DataLoader(eeg_dataset, batch_size=batch_size, shuffle=True, num_workers=2)
+    dataloader = DataLoader(eeg_dataset, batch_size=batch_size, shuffle=True, num_workers=num_workers)
 
     return dataloader
 
