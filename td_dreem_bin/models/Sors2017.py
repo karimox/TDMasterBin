@@ -35,7 +35,7 @@ class SorsNet(nn.Module):
 
         x = x.view(-1, self.num_flat_features(x))
         x = self.activfunc_a(self.fc1(x))
-        x = nn.Softmax(self.fc2(x))
+        x = self.fc2(x)
 
         return x
 
@@ -52,15 +52,15 @@ if __name__ == "__main__":
     import torch.optim as optim
 
     from td_dreem_bin import path_repo
-    from td_dreem_bin.load_data.load_data import get_train_dataset
+    from td_dreem_bin.load_data.single_channel import get_train_dataset
 
     #datasets
-    trainloader = get_train_dataset(batch_size=32)
+    trainloader = get_train_dataset('eeg_4', batch_size=32)
 
     # neural network and co
     net = SorsNet()
     criterion = nn.CrossEntropyLoss()
-    optimizer = optim.SGD(net.parameters(), lr=0.001, momentum=0.9)
+    optimizer = optim.Adam(net.parameters(), lr=0.001)
 
     print('training...')
     for epoch in range(2):  # loop over the dataset multiple times
@@ -81,12 +81,12 @@ if __name__ == "__main__":
 
             # print statistics
             running_loss += loss.item()
-            if i % 2000 == 1999:    # print every 2000 mini-batches
+            if i % 100 == 99:    # print every 100 mini-batches
                 print('[%d, %5d] loss: %.3f' %
                       (epoch + 1, i + 1, running_loss / 2000))
                 running_loss = 0.0
 
     print('Finished Training')
 
-    save_path = os.path.join(path_repo, "predictors/karim_net1.pth")
+    save_path = os.path.join(path_repo, "predictors/sors_net1.pth")
     torch.save(net.state_dict(), save_path)

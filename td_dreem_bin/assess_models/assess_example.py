@@ -1,5 +1,4 @@
 """ Test CNN network
-
 """
 
 if __name__ == "__main__":
@@ -7,20 +6,26 @@ if __name__ == "__main__":
     import torch
 
     from td_dreem_bin import path_repo
-    from td_dreem_bin.load_data.load_data import get_test_dataset
-    from td_dreem_bin.models.CNN_example import Net
+    from td_dreem_bin.load_data.single_channel import get_test_dataset
+    from td_dreem_bin.models.Sors2017 import SorsNet
+    from td_dreem_bin.utils.scores import score_functions
 
+    # params
     classes = ['Wake', 'N1', 'N2', 'N3', 'REM']
-    # datasets
-    testloader = get_test_dataset()
-    save_path = os.path.join(path_repo, "predictors/karim_net1.pth")
+    compute_f1 = score_functions['f1']
+    compute_cohen_kappa = score_functions['cohen_kappa']
+    compute_accuracy = score_functions['accuracy']
 
-    net = Net()
+    # datasets
+    testloader = get_test_dataset('eeg_4', batch_size=32)
+    save_path = os.path.join(path_repo, "predictors/sors_net1.pth")
+
+    net = SorsNet()
     net.load_state_dict(torch.load(save_path))
 
-    class_correct = list(0. for i in range(5))
-    class_total = list(0. for i in range(5))
     with torch.no_grad():
+        prediction_list = torch.empty(0)
+        label_list = torch.empty(0)
         for data in testloader:
             inputs, labels = data
             outputs = net(inputs)
