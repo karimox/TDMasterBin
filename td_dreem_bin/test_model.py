@@ -7,8 +7,8 @@ if __name__ == "__main__":
     import torch
 
     from td_dreem_bin import path_repo
-    from td_dreem_bin.load_data import get_test_dataset
-    from td_dreem_bin.CNN_dreem import Net
+    from td_dreem_bin.load_data.load_data import get_test_dataset
+    from td_dreem_bin.models.CNN_example import Net
 
     classes = ['Wake', 'N1', 'N2', 'N3', 'REM']
     # datasets

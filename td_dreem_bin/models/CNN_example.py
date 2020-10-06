@@ -42,7 +42,7 @@ if __name__ == "__main__":
     import torch.optim as optim
 
     from td_dreem_bin import path_repo
-    from td_dreem_bin.load_data import get_train_dataset
+    from td_dreem_bin.load_data.load_data import get_train_dataset
 
     #datasets
     trainloader = get_train_dataset(batch_size=32)

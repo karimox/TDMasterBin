@@ -3,7 +3,6 @@
 """
 
 from scipy import signal
-from scipy.fft import fftshift
 import matplotlib.pyplot as plt
 from lspopt.lsp import spectrogram_lspopt
 
@@ -35,12 +34,7 @@ def plot_spectrum(eeg_signal, fs=250):
 
 if __name__ == "__main__":
 
-    import os
-    import h5py
-    import pandas as pd
-    from td_dreem_bin import path_repo
-
-    from td_dreem_bin.load_data import load_one_signal
+    from td_dreem_bin.load_data.load_data import load_one_signal
 
     eeg_signal = load_one_signal('eeg_4', 1000)
     plot_spectrum(eeg_signal)
