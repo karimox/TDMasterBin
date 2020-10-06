@@ -22,6 +22,8 @@ class SorsmultiNet(nn.Module):
         self.fc1 = nn.Linear(3 * 256, 100)
         self.fc2 = nn.Linear(100, 5)
 
+        self.drop_layer = nn.Dropout(p=0.5)
+
     def forward(self, x):
 
         x = self.activfunc_a(self.conv_a(x))
@@ -34,7 +36,9 @@ class SorsmultiNet(nn.Module):
         x = self.activfunc_a(self.conv_e(x))
 
         x = x.view(-1, self.num_flat_features(x))
+        x = self.drop_layer(x)
         x = self.activfunc_a(self.fc1(x))
+        x = self.drop_layer(x)
         x = self.fc2(x)
 
         return x
@@ -52,18 +56,18 @@ if __name__ == "__main__":
     import torch.optim as optim
 
     from td_dreem_bin import path_repo
-    from td_dreem_bin.load_data.single_channel import get_train_dataset
+    from td_dreem_bin.load_data.multi_channel import get_train_dataset
 
     #datasets
-    trainloader = get_train_dataset('eeg_4', batch_size=32)
+    trainloader = get_train_dataset(batch_size=32)
 
     # neural network and co
-    net = SorsNet()
+    net = SorsmultiNet()
     criterion = nn.CrossEntropyLoss()
     optimizer = optim.Adam(net.parameters(), lr=0.001)
 
     print('training...')
-    for epoch in range(2):  # loop over the dataset multiple times
+    for epoch in range(4):  # loop over the dataset multiple times
 
         running_loss = 0.0
         for i, data in enumerate(trainloader, 0):
@@ -83,7 +87,7 @@ if __name__ == "__main__":
             running_loss += loss.item()
             if i % 100 == 99:    # print every 100 mini-batches
                 print('[%d, %5d] loss: %.3f' %
-                      (epoch + 1, i + 1, running_loss / 2000))
+                      (epoch + 1, i + 1, running_loss / 100))
                 running_loss = 0.0
 
     print('Finished Training')

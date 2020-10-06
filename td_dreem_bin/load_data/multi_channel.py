@@ -45,7 +45,7 @@ class EegEpochDataset(Dataset):
         with h5py.File(self.x_filename, "r") as fi:
             for field in self.fields:
                 self.x_train.append([fi[field][()]])
-        self.x_train = np.stack(self.x_train, axis=2)
+        self.x_train = np.stack(self.x_train, axis=2)[0]
 
     def __len__(self):
         return len(self.y_stages)
