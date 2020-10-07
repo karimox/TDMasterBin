@@ -9,7 +9,7 @@ import torch
 from torch.utils.data import Dataset, DataLoader
 
 from td_dreem_bin import path_repo
-data_path = os.path.join(path_repo, "data/")
+data_path = os.path.join(path_repo, "data", "kaggle/")
 
 file_xtrain = data_path + "X_train.h5"
 file_xtest = data_path + "X_test.h5"
