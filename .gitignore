@@ -131,5 +131,8 @@ dmypy.json
 # data folder
 data/
 
-#pycharm
+# pycharm
 .idea/
+
+# google colab notebooks
+test_model_colab.ipynb
