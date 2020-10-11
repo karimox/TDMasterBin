@@ -16,6 +16,8 @@ matplotlib = "^3.3.2"
 lspopt = "^1.1.1"
 torchvision = "^0.7.0"
 PyQt5 = "^5.15.1"
+mne = "^0.21.0"
+ipdb = "^0.13.4"
 
 [tool.poetry.dev-dependencies]
 pytest = "^4.6"

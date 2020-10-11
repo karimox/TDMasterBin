@@ -7,13 +7,13 @@ import numpy as np
 
 from td_dreem_bin import path_repo
 
-data_path = os.path.join(path_repo, "data", "Records/")
+path_records = os.path.join(path_repo, "data", "Records/")
 list_record = [1979683, 1980547, 1994683, 1994698, 1994755]
 
 
 def get_one_record_hypnogram(record):
     """ load hypnogram for one record: computed with Dreem algorithm"""
-    filename = data_path + str(record) + '.h5'
+    filename = path_records + str(record) + '.h5'
     with h5py.File(filename, "r") as fi:
         hypnogram = fi['algo/dreemnogram'][:]
         start_time = fi.attrs['start_time']
@@ -23,7 +23,7 @@ def get_one_record_hypnogram(record):
 
 def load_one_record_spectrogram(record):
     """ load spectrograms for one record: channel 1 & 2"""
-    file_spectrogram = data_path + str(record) + '_spectrogram.h5'
+    file_spectrogram = path_records + str(record) + '_spectrogram.h5'
 
     with h5py.File(file_spectrogram, "r") as fi:
         t1 = fi['/channel1/time'][()]

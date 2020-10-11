@@ -1,14 +1,8 @@
 """ Work on hypnograms and spectrograms
 
 """
-import os
 import numpy as np
 import matplotlib.pyplot as plt
-
-from td_dreem_bin import path_repo
-
-data_path = os.path.join(path_repo, "data", "records/")
-list_record = [1979683, 1980547, 1994683, 1994698, 1994755]
 
 
 def datetime_to_nightsec(d_time):
@@ -127,6 +121,7 @@ if __name__ == "__main__":
     from datetime import datetime
 
     # data
+    list_record = [1979683, 1980547, 1994683, 1994698, 1994755]
     record = list_record[1]
     t1, freq1, specg1, t2, freq2, specg2 = load_one_record_spectrogram(record)
     hypnogram, start_time = get_one_record_hypnogram(record)
