@@ -18,6 +18,8 @@ torchvision = "^0.7.0"
 PyQt5 = "^5.15.1"
 mne = "^0.21.0"
 ipdb = "^0.13.4"
+requests = "^2.24.0"
+yasa = "^0.3.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^4.6"

@@ -11,6 +11,24 @@ path_records = os.path.join(path_repo, "data", "Records/")
 list_record = [1979683, 1980547, 1994683, 1994698, 1994755]
 
 
+def get_one_record(record):
+    """ load one Dreem record"""
+    filename = path_records + str(record) + '.h5'
+    fields = {
+        'eeg_1': 'channel1/visualization',
+        'eeg_2': 'channel2/visualization',
+        'hypnogram':'algo/dreemnogram',
+        'accelerometer': 'accelerometer/norm'
+    }
+
+    results = {}
+    with h5py.File(filename, "r") as fi:
+        for key, field in fields.items():
+            results[key] = fi[field][()]
+        results['start_time'] = fi.attrs['start_time']
+    return results
+
+
 def get_one_record_hypnogram(record):
     """ load hypnogram for one record: computed with Dreem algorithm"""
     filename = path_records + str(record) + '.h5'
@@ -38,4 +56,4 @@ def load_one_record_spectrogram(record):
 
 
 if __name__ == "__main__":
-    t1, freq1, specg1, t2, freq2, specg2 = get_one_record_spectrogram(list_record[0])
+    results = get_one_record(list_record[0])
