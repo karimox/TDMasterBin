@@ -42,5 +42,7 @@ if __name__ == "__main__":
     cohen_kappa = compute_cohen_kappa(label_list, prediction_list)
     accuracy = compute_accuracy(label_list, prediction_list)
 
-    print('F1-score = %2d %%' % (f1_score))
+    print('F1-score = %2d %%' % (f1_score*100))
+    print('Cohen Kappa = %2d %%' % (cohen_kappa*100))
+    print('Accuracy = %2d %%' % (accuracy*100))
 

@@ -24,26 +24,28 @@ if __name__ == "__main__":
     start_time = datetime.fromtimestamp(results['start_time'])
     fs = 250.
 
-    #spectrogram
+    # spectrogram
     specg1, t1, freq1 = compute_spectrogram(eeg_1, fs)
     specg2, t2, freq2 = compute_spectrogram(eeg_2, fs)
 
     # plot
-    fig, axs = plt.subplots(3, 1, figsize=(18, 14))
+    fig, axs = plt.subplots(nrows=3, ncols=2, figsize=(18, 10), gridspec_kw={'width_ratios': [25, 1]})
     axs = np.ravel(axs)
+    axs[3].set_visible(False)
+    axs[5].set_visible(False)
     rescale = 3600
 
     # spectrogram channel 1
-    img1 = plot_spectrogram(specg1, t1, freq1, axe_plot=axs[0], rescale=rescale,
+    img1 = plot_spectrogram(specg1, t1, freq1, axe_plot=axs[0], rescale=rescale, colourbar=axs[1],
                             start_time=start_time, title='Channel 1 - F7-01')
 
     # accelerometer
-    mov = plot_accelerometer(accelerometer, axe_plot=axs[1], fs=50.,
+    mov = plot_accelerometer(accelerometer, axe_plot=axs[2], fs=50.,
                              rescale=rescale, start_time=start_time, title='movement')
     axs[1].set_xlim(axs[0].get_xlim())
 
     # hypnogram
-    hyp = plot_hypnogram(hypnogram, axe_plot=axs[2], binsize=30,
+    hyp = plot_hypnogram(hypnogram, axe_plot=axs[4], binsize=30,
                          rescale=rescale, start_time=start_time, title='Hypnogram')
     hyp.set_xlabel('Time [h]')
 

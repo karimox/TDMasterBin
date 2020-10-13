@@ -54,3 +54,21 @@ score_functions = {
     "cohen_kappa": mask_non_scored_values(cohen_kappa_custom),
     "f1": mask_non_scored_values(f1_custom),
 }
+
+
+def get_all_score(true, pred):
+    compute_f1 = score_functions['f1']
+    compute_cohen_kappa = score_functions['cohen_kappa']
+    compute_accuracy = score_functions['accuracy']
+
+    f1_score = compute_f1(true, pred)
+    cohen_kappa = compute_cohen_kappa(true, pred)
+    accuracy = compute_accuracy(true, pred)
+
+    results = {
+        'f1_score': f1_score,
+        'cohen_kappa': cohen_kappa,
+        'accuracy': accuracy
+    }
+    return results
+

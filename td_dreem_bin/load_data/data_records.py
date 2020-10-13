@@ -8,7 +8,10 @@ import numpy as np
 from td_dreem_bin import path_repo
 
 path_records = os.path.join(path_repo, "data", "Records/")
-list_record = [1979683, 1980547, 1994683, 1994698, 1994755]
+test_records = [1908193, 1990201, 1999154, 2010577, 2015858]
+train_records = [1955925, 1960988, 1975358, 1979683, 1980547, 1981722, 1982067, 1987838,
+                 1990207, 1994683, 1994698, 1994755, 2011881, 2014079, 2014658]
+list_record = test_records + train_records
 
 
 def get_one_record(record):
@@ -17,7 +20,7 @@ def get_one_record(record):
     fields = {
         'eeg_1': 'channel1/visualization',
         'eeg_2': 'channel2/visualization',
-        'hypnogram':'algo/dreemnogram',
+        'hypnogram': 'algo/dreemnogram',
         'accelerometer': 'accelerometer/norm'
     }
 

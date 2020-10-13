@@ -3,7 +3,7 @@ Plotting functions of YASA.
 """
 import numpy as np
 import matplotlib.pyplot as plt
-from td_dreem_bin.utils.hypnogram import datetime_to_nightsec
+from td_dreem_bin.utils.utils import datetime_to_nightsec
 
 
 def plot_accelerometer(accelerometer_array,

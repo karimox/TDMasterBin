@@ -5,7 +5,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from lspopt import spectrogram_lspopt
 from matplotlib.colors import Normalize
-from td_dreem_bin.utils.hypnogram import datetime_to_nightsec
+from td_dreem_bin.utils.utils import datetime_to_nightsec
 
 # Set default font size to 12
 plt.rcParams.update({'font.size': 12})
@@ -38,7 +38,7 @@ def plot_spectrogram(spectrogram_array,
                      rescale=3600.,
                      start_time=0,
                      title='spectrogram',
-                     colourbar=True):
+                     colourbar=None):
     """
     plot spectrogram
     """
@@ -60,7 +60,7 @@ def plot_spectrogram(spectrogram_array,
     else:
         ax = axe_plot
 
-    im = ax.pcolormesh(t, f, Sxx, norm=norm, cmap=cmap, antialiased=True)
+    im = ax.pcolormesh(t, f, Sxx, norm=norm, cmap=cmap, antialiased=True, shading='auto')
     tmp = range(-8, 24, 2)
     ax.set_xticks(tmp)
     ax.set_xticklabels([t % 24 for t in tmp])
@@ -68,10 +68,10 @@ def plot_spectrogram(spectrogram_array,
     ax.set_ylabel('Frequency [Hz]')
     ax.set_title(title)
 
-    # # Add colorbar
-    # if colourbar:
-    #     cbar = fig.colorbar(im, ax=ax, shrink=0.95, fraction=0.1, aspect=25)
-    #     cbar.ax.set_ylabel('Log Power (dB / Hz)', rotation=270, labelpad=20)
+    # Add colorbar
+    if colourbar:
+        cbar = plt.colorbar(im, ax=ax, cax=colourbar, shrink=0.95, fraction=0.1, aspect=25)
+        cbar.ax.set_ylabel('Log Power (dB / Hz)', rotation=270, labelpad=20)
 
     if axe_plot is None:
         fig.show()
@@ -80,10 +80,10 @@ def plot_spectrogram(spectrogram_array,
 
 
 if __name__ == "__main__":
+    from datetime import datetime
+
     from td_dreem_bin.load_data.data_records import get_one_record
     from td_dreem_bin.utils.hypnogram import plot_hypnogram
-
-    from datetime import datetime
 
     # data
     list_record = [1979683, 1980547, 1994683, 1994698, 1994755]
