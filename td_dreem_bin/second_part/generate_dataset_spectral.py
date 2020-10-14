@@ -12,7 +12,7 @@ from td_dreem_bin.load_data.data_records import (
 )
 
 
-def create_dataset_spectral(record_list):
+def create_dataset_spectral(record_list, output_freq=False):
     """
     generate x and y data from record_list for classification
     """
@@ -56,20 +56,23 @@ def create_dataset_spectral(record_list):
     x_data = x_data[idx_keep]
     y_data = y_data[idx_keep]
 
-    return x_data, y_data
+    if output_freq:
+        return x_data, y_data, freq1
+    else:
+        return x_data, y_data
 
 
-def get_train_dataset_spectral():
-    return create_dataset_spectral(train_records)
+def get_train_dataset_spectral(output_freq=False):
+    return create_dataset_spectral(train_records, output_freq=output_freq)
 
 
-def get_test_dataset_spectral():
-    return create_dataset_spectral(test_records)
+def get_test_dataset_spectral(output_freq=False):
+    return create_dataset_spectral(test_records, output_freq=output_freq)
 
 
 if __name__ == "__main__":
 
-    x_train, y_train = get_train_dataset_spectral()
+    x_train, y_train, freq = get_train_dataset_spectral(output_freq=True)
     x_test, y_test = get_test_dataset_spectral()
 
     # save
@@ -78,6 +81,6 @@ if __name__ == "__main__":
     save_folder = os.path.join(path_repo, "data", "processed/")
 
     save_path = os.path.join(save_folder, "record_datatrain_spectrogram")
-    np.savez(save_path, x_train=x_train, y_train=y_train)
+    np.savez(save_path, x_train=x_train, y_train=y_train, freq=freq)
     save_path = os.path.join(save_folder, "record_datatest_spectrogram")
-    np.savez(save_path, x_test=x_test, y_test=y_test)
+    np.savez(save_path, x_test=x_test, y_test=y_test, freq=freq)

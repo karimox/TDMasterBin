@@ -21,7 +21,10 @@ def get_one_record(record):
         'eeg_1': 'channel1/visualization',
         'eeg_2': 'channel2/visualization',
         'hypnogram': 'algo/dreemnogram',
-        'accelerometer': 'accelerometer/norm'
+        'accelerometer': 'accelerometer/norm',
+        'x_acc': 'accelerometer/x',
+        'y_acc': 'accelerometer/y',
+        'z_acc': 'accelerometer/z'
     }
 
     results = {}

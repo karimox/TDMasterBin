@@ -1,5 +1,5 @@
 """
-Plotting functions of YASA.
+Spectrogram functions.
 """
 import numpy as np
 import matplotlib.pyplot as plt
@@ -10,8 +10,18 @@ from td_dreem_bin.utils.utils import datetime_to_nightsec
 # Set default font size to 12
 plt.rcParams.update({'font.size': 12})
 
+frequency_bands = {
+    'delta': [0.5, 4],
+    'theta': [4, 8],
+    'lowfreq': [0.5, 8],
+    'alpha': [8, 12],
+    'sigma': [11, 15],
+    'beta': [15, 18],
+    'kcomp': [0.9, 11]
+}
 
-def compute_spectrogram(eeg_data, fs, win_sec=10, fmin=0.5, fmax=18):
+
+def compute_spectrogram(eeg_data, fs, win_sec=30, fmin=0.5, fmax=18):
     """
     Compute spectrogram from EEG 1D-array
     """
@@ -79,6 +89,39 @@ def plot_spectrogram(spectrogram_array,
     return ax
 
 
+def compute_spectral_features(spectrogram, freq):
+    """
+    Compute spectral features - frequency bands
+    """
+    n_bins = spectrogram.shape[1]
+
+    # normalize between 0 and 1
+    spectrogram = (spectrogram - np.min(spectrogram)) / (np.max(spectrogram) - np.min(spectrogram))
+
+    features_value = {}
+    total_power = np.sum(spectrogram, 0)
+    for nameband, fband in frequency_bands.items():
+        fmin, fmax = fband[0], fband[1]
+        idx_f = np.logical_and(freq >= fmin, freq <= fmax)
+        power = np.sum(spectrogram[idx_f, :], 0)
+        ratio = [value / total_power[i] for i, value in enumerate(power)]
+
+        features_value[nameband] = power
+        features_value[nameband + '_r'] = ratio
+
+    # spectral edges
+    cumsum_power = np.cumsum(spectrogram / total_power, axis=0)
+    SC = freq[[(cumsum_power[:, i] > 0.5).argmax() for i in range(n_bins)]]
+    SEF90 = freq[[(cumsum_power[:, i] > 0.9).argmax() for i in range(n_bins)]]
+    SEF95 = freq[[(cumsum_power[:, i] > 0.95).argmax() for i in range(n_bins)]]
+
+    features_value['SC'] = SC
+    features_value['SEF90'] = SEF90
+    features_value['SEF95'] = SEF95
+
+    return features_value
+
+
 if __name__ == "__main__":
     from datetime import datetime
 
@@ -97,26 +140,29 @@ if __name__ == "__main__":
     fs = 250.
 
     #spectrogram
-    specg1, t1, freq1 = compute_spectrogram(eeg_1, fs)
-    specg2, t2, freq2 = compute_spectrogram(eeg_2, fs)
+    specg1, t1, freq1 = compute_spectrogram(eeg_1, fs, win_sec=30)
+    # specg2, t2, freq2 = compute_spectrogram(eeg_2, fs)
 
-    # plot
-    fig, axs = plt.subplots(3, 1, figsize=(18, 14))
-    axs = np.ravel(axs)
-    rescale = 3600
+    features_value = compute_spectral_features(specg1, freq1)
 
-    # spectrogram channel 1
-    img1 = plot_spectrogram(specg1, t1, freq1, axe_plot=axs[0], rescale=rescale,
-                            start_time=start_time, title='Channel 1 - F7-01')
 
-    # accelerometer
-    mov = plot_accelerometer(accelerometer, axe_plot=axs[1], fs=50.,
-                             rescale=rescale, start_time=start_time, title='movement')
-    axs[1].set_xlim(axs[0].get_xlim())
-
-    # hypnogram
-    hyp = plot_hypnogram(hypnogram, axe_plot=axs[2], binsize=30,
-                         rescale=rescale, start_time=start_time, title='Hypnogram')
-    hyp.set_xlabel('Time [h]')
-
-    fig.show()
+    # # plot
+    # fig, axs = plt.subplots(3, 1, figsize=(18, 14))
+    # axs = np.ravel(axs)
+    # rescale = 3600
+    #
+    # # spectrogram channel 1
+    # img1 = plot_spectrogram(specg1, t1, freq1, axe_plot=axs[0], rescale=rescale,
+    #                         start_time=start_time, title='Channel 1 - F7-01')
+    #
+    # # accelerometer
+    # mov = plot_accelerometer(accelerometer, axe_plot=axs[1], fs=50.,
+    #                          rescale=rescale, start_time=start_time, title='movement')
+    # axs[1].set_xlim(axs[0].get_xlim())
+    #
+    # # hypnogram
+    # hyp = plot_hypnogram(hypnogram, axe_plot=axs[2], binsize=30,
+    #                      rescale=rescale, start_time=start_time, title='Hypnogram')
+    # hyp.set_xlabel('Time [h]')
+    #
+    # fig.show()

@@ -1,5 +1,5 @@
 """
-Train a classifier from spectrogram
+Train a classifier on precomputed features
 """
 import numpy as np
 from sklearn.decomposition import PCA
@@ -21,20 +21,20 @@ def load_datasets():
     from td_dreem_bin import path_repo
     save_folder = os.path.join(path_repo, "data", "processed/")
 
-    load_path = os.path.join(save_folder, "record_datatrain_spectrogram.npz")
+    load_path = os.path.join(save_folder, "record_datatrain_features.npz")
     npzfile = np.load(load_path)
     x_train, y_train = npzfile['x_train'], npzfile['y_train']
-    load_path = os.path.join(save_folder, "record_datatest_spectrogram.npz")
+    load_path = os.path.join(save_folder, "record_datatest_features.npz")
     npzfile = np.load(load_path)
     x_test, y_test = npzfile['x_test'], npzfile['y_test']
-    freq = npzfile['freq']
 
-    return x_train, y_train, x_test, y_test, freq
+    return x_train, y_train, x_test, y_test
 
 
 def estimator_rfboost():
-    rf_pipeline = make_pipeline(RandomForestClassifier(n_estimators=10, random_state=42))
-    gradient_pipeline = make_pipeline(HistGradientBoostingClassifier(learning_rate=0.01, random_state=30))
+    rf_pipeline = make_pipeline(RandomForestClassifier(n_estimators=100, random_state=42))
+    gradient_pipeline = make_pipeline(HistGradientBoostingClassifier(max_iter=1000, l2_regularization=0.6,
+                                                                     learning_rate=0.01, random_state=30))
 
     estimators = [('Random Forest', rf_pipeline),
                   ('Gradient Boosting', gradient_pipeline)]
@@ -54,7 +54,7 @@ def pca_on_datasets(x_train, x_test, n_components=100):
 
 if __name__ == "__main__":
 
-    x_train, y_train, x_test, y_test, freq = load_datasets()
+    x_train, y_train, x_test, y_test = load_datasets()
 
     # shuffle input data
     p = np.random.permutation(len(y_train))
@@ -65,7 +65,7 @@ if __name__ == "__main__":
 
     # select estimator
     clf = RandomForestClassifier(max_depth=10, random_state=42)
-    clf = AdaBoostClassifier(DecisionTreeClassifier(max_depth=30),
+    clf = AdaBoostClassifier(DecisionTreeClassifier(max_depth=10),
                              n_estimators=200,
                              learning_rate=0.5)
     clf = estimator_rfboost()
@@ -80,5 +80,3 @@ if __name__ == "__main__":
     print('F1-score = %2d %%' % (all_scores['f1_score']*100))
     print('Cohen Kappa = %2d %%' % (all_scores['cohen_kappa']*100))
     print('Accuracy = %2d %%' % (all_scores['accuracy']*100))
-
-
