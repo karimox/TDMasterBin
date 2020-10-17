@@ -76,6 +76,7 @@ def plot_spectrogram(spectrogram_array,
     ax.set_xticklabels([t % 24 for t in tmp])
     ax.set_xlim(t[0], t[-1])
     ax.set_ylabel('Frequency [Hz]')
+    ax.set_ylim(0, 15)
     ax.set_title(title)
 
     # Add colorbar

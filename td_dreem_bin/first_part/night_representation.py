@@ -12,11 +12,12 @@ if __name__ == "__main__":
     from td_dreem_bin.utils.spectrogram import compute_spectrogram, plot_spectrogram
 
     from datetime import datetime
+    from td_dreem_bin.load_data.data_records import list_record
 
     # data
-    list_record = [1979683, 1980547, 1994683, 1994698, 1994755]
-    record = list_record[2]
-    results = get_one_record(list_record[1])
+    id = 4
+    print(list_record[id])
+    results = get_one_record(list_record[id])
     eeg_1 = results['eeg_1']
     eeg_2 = results['eeg_2']
     hypnogram = results['hypnogram']

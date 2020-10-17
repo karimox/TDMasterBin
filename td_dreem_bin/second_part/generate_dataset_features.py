@@ -23,7 +23,7 @@ def get_feature_representation(eeg_data, x_y_z, epochs, fs=250.):
     features_name = []
 
     # index
-    features_name += ['index']
+    features_name += ['index_window']
     features_vector += [np.arange(len(epochs) - 1)]
 
     # spectral band
@@ -69,7 +69,7 @@ def create_dataset_features(record_list):
     x_data = []
     y_data = []
 
-    for record in record_list:
+    for i, record in enumerate(record_list):
         # get data
         results = get_one_record(record)
         eeg_data = results['eeg_1']
@@ -79,6 +79,8 @@ def create_dataset_features(record_list):
         # extract features
         epochs = np.arange(0, len(hypnogram) + 1) * epoch_size
         features_df = get_feature_representation(eeg_data, [x, y, z], epochs)
+        # add column with record
+        features_df.insert(loc=0, column='record', value=i)
 
         # dataset
         x_data += [features_df]
