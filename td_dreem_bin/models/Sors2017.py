@@ -53,9 +53,11 @@ if __name__ == "__main__":
 
     from td_dreem_bin import path_repo
     from td_dreem_bin.load_data.single_channel import get_train_dataset
+    from td_dreem_bin.load_data.kaggle_loader import get_train_validation_dataset
 
     #datasets
     trainloader = get_train_dataset('eeg_4', batch_size=32)
+    trainloader, _ = get_train_validation_dataset('eeg_4', batch_size=32)
 
     # neural network and co
     net = SorsNet()
@@ -83,10 +85,10 @@ if __name__ == "__main__":
             running_loss += loss.item()
             if i % 100 == 99:    # print every 100 mini-batches
                 print('[%d, %5d] loss: %.3f' %
-                      (epoch + 1, i + 1, running_loss / 2000))
+                      (epoch + 1, i + 1, running_loss / 100))
                 running_loss = 0.0
 
     print('Finished Training')
 
-    save_path = os.path.join(path_repo, "predictors/sors_net1.pth")
+    save_path = os.path.join(path_repo, "predictors/sors_net4.pth")
     torch.save(net.state_dict(), save_path)

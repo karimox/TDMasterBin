@@ -107,15 +107,15 @@ def get_test_dataset_features():
 
 if __name__ == "__main__":
 
-    x_train, y_train = get_train_dataset_features()
+    # x_train, y_train = get_train_dataset_features()
     x_test, y_test = get_test_dataset_features()
 
-    # save
-    import os
-    from td_dreem_bin import path_repo
-    save_folder = os.path.join(path_repo, "data", "processed/")
-
-    save_path = os.path.join(save_folder, "record_datatrain_features")
-    np.savez(save_path, x_train=x_train, y_train=y_train)
-    save_path = os.path.join(save_folder, "record_datatest_features")
-    np.savez(save_path, x_test=x_test, y_test=y_test)
+    # # save
+    # import os
+    # from td_dreem_bin import path_repo
+    # save_folder = os.path.join(path_repo, "data", "processed/")
+    #
+    # save_path = os.path.join(save_folder, "record_datatrain_features")
+    # np.savez(save_path, x_train=x_train, y_train=y_train)
+    # save_path = os.path.join(save_folder, "record_datatest_features")
+    # np.savez(save_path, x_test=x_test, y_test=y_test)

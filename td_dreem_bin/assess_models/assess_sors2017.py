@@ -8,6 +8,7 @@ if __name__ == "__main__":
 
     from td_dreem_bin import path_repo
     from td_dreem_bin.load_data.single_channel import get_test_dataset
+    from td_dreem_bin.load_data.kaggle_loader import get_train_validation_dataset
     from td_dreem_bin.models.Sors2017 import SorsNet
     from td_dreem_bin.utils.scores import score_functions
 
@@ -19,7 +20,8 @@ if __name__ == "__main__":
 
     # datasets
     testloader = get_test_dataset('eeg_4', batch_size=32)
-    save_path = os.path.join(path_repo, "predictors/sors_net1.pth")
+    _, testloader = get_train_validation_dataset('eeg_4', batch_size=32, num_workers=2)
+    save_path = os.path.join(path_repo, "predictors/sors_net4.pth")
 
     net = SorsNet()
     net.load_state_dict(torch.load(save_path))
